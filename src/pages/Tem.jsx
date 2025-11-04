@@ -23,14 +23,13 @@ const addTemplateButton = () => {
     let comps = [...prev.components];
     let btnIdx = comps.findIndex(c => c.type === 'BUTTONS');
     if (btnIdx === -1) {
-      // Add new BUTTONS
       comps.push({
         type: 'BUTTONS',
-        buttons: [{ type: 'QUICK_REPLY', text: 'New Button' }]
+        buttons: [{ type: 'QUICK_REPLY', text: 'Reply' }]
       });
     } else {
       let buttons = comps[btnIdx].buttons || [];
-      if (buttons.length < 3) { // WhatsApp max 3
+      if (buttons.length < 3) {
         buttons = [...buttons, { type: 'QUICK_REPLY', text: 'New Button' }];
         comps[btnIdx] = { ...comps[btnIdx], buttons };
       }
@@ -38,7 +37,6 @@ const addTemplateButton = () => {
     return { ...prev, components: comps };
   });
 };
-
 // Remove a button by index; remove the BUTTONS component if no buttons left
 const removeTemplateButton = (btnIndex) => {
   setCustomizedTemplate(prev => {
@@ -584,29 +582,36 @@ const removeTemplateButton = (btnIndex) => {
                         />
                       )}
 
-                      {component.type === 'BUTTONS' && (
+                      
+{component.type === 'BUTTONS' && (
   <div className="buttons-editor">
-    <div style={{marginBottom: 8, fontWeight: 500}}>Buttons (max 3):</div>
+    <div style={{marginBottom: 8}}>
+      <strong>Quick Reply Buttons (max 3):</strong>
+      <p style={{fontSize: '12px', color: '#666', margin: '4px 0'}}>
+        Note: Using Quick Reply buttons for maximum reliability. Users tap these to respond quickly.
+      </p>
+    </div>
     {component.buttons?.map((btn, btnIndex) => (
       <div key={btnIndex} className="button-item" style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6}}>
-        <span className="button-type-badge">{btn.type}</span>
+        <span className="button-type-badge" style={{background: '#4caf50', padding: '2px 8px', borderRadius: 4, fontSize: '11px', color: 'white'}}>
+          QUICK_REPLY
+        </span>
         <input
           type="text"
           value={btn.text}
           onChange={e => {
-            // Update button text
             const newButtons = [...component.buttons];
-            newButtons[btnIndex] = { ...newButtons[btnIndex], text: e.target.value };
+            newButtons[btnIndex] = { type: 'QUICK_REPLY', text: e.target.value };
             updateComponent(index, 'buttons', newButtons);
           }}
-          placeholder="Button text"
-          maxLength={20}
+          placeholder="Button text (max 25 chars)"
+          maxLength={25}
+          style={{flex: 1, padding: '6px', border: '1px solid #ddd', borderRadius: 4}}
         />
         <button
           type="button"
-          title="Remove button"
           onClick={() => removeTemplateButton(btnIndex)}
-          style={{padding: "0 10px", color: "#fff", background: "#dc3545", border: "none", borderRadius: 4, cursor: "pointer"}}
+          style={{padding: "4px 10px", color: "#fff", background: "#dc3545", border: "none", borderRadius: 4, cursor: "pointer"}}
         >
           ✕
         </button>
@@ -616,15 +621,13 @@ const removeTemplateButton = (btnIndex) => {
       <button
         type="button"
         onClick={addTemplateButton}
-        className="add-button-btn"
-        style={{marginTop: 10, background: "#3576ff", color: "#fff", border: "none", borderRadius: 4, padding: "6px 12px"}}
+        style={{marginTop: 10, background: '#4caf50', color: '#fff', border: 'none', borderRadius: 4, padding: '8px 16px', cursor: 'pointer'}}
       >
-        + Add Button
+        + Add Quick Reply Button
       </button>
     )}
   </div>
 )}
-
                     </div>
                   );
                 })}
