@@ -413,6 +413,18 @@ const removeTemplateButton = (btnIndex) => {
               {/* Media Control */}
               <div className="customize-section media-section">
                 <h3>Media Header</h3>
+                <div className="info-banner" style={{
+    background: '#e3f2fd',
+    padding: '12px',
+    borderRadius: '8px',
+    marginBottom: '16px',
+    border: '1px solid #2196f3'
+  }}>
+    <p style={{margin: 0, fontSize: '14px', color: '#1976d2'}}>
+      ℹ️ <strong>Note:</strong> For template creation, we only specify that the header will contain media. 
+      You'll provide the actual image/video when sending messages using this template.
+    </p>
+  </div>
                 
                 {customizedTemplate?.has_media && !wantsToRemoveMedia ? (
                   <div className="media-control">
